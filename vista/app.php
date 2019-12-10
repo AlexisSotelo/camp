@@ -38,7 +38,7 @@
 <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
     
-    <?php// $msj = App_controlador::messagesInfo("Titulo","Esta pagina es una prueba","error","")?>
+  
     <!-- Aqui va el navbar -->
     <?php $app->getComponents('navbar'); ?>
 

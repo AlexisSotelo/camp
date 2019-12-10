@@ -39,18 +39,18 @@ class TutorControlador
                 } else {
 
                     // encriptar el id y el password
-                      md5($_POST['TutorCorreo'], PASSWORD_DEFAULT);
-                      password_hash($_POST['TutorPass'], PASSWORD_DEFAULT);
+                     $_POST['TutorCorreo'] = md5($_POST['TutorCorreo']);
+                     $_POST['TutorPass'] = password_hash($_POST['TutorPass'], PASSWORD_DEFAULT);
                     //mandar todos los datos de post hacia el tutor.modelo para que lo envie a la BD
                     $guardarTutor = TutorModelo::mdlAgregarTutor($_POST);
                     if ($guardarTutor > 0) {
-                        App_controlador::messagesInfo("Muy hecho!", "Registro insertado", "success", "usuarios");
+                        App_controlador::messagesInfo("Bien hecho!", "Registro insertado", "success", "usuarios");
                     } else {
                         App_controlador::messagesInfo("Error", "Es probable que ya exista este registro", "error");
                     }
                 }
             } else {
-                App_controlador::messagesInfo("Correo incorrecto", "Algunos campos no cumplen con el formato valido. Intente de nuevo", "error");
+                App_controlador::messagesInfo("Error", "Algunos campos no cumplen con el formato valido. Intente de nuevo", "error");
             }
         }
     }
