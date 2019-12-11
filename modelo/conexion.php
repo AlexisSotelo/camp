@@ -7,7 +7,7 @@
                 
                 $con = new PDO("mysql:host=localhost;dbname=camp", "root","");
 
-                $con->exec("set name utf8");
+                $con->exec("set names utf8");
 
                 return $con;
 

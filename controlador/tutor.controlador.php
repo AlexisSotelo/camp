@@ -39,8 +39,11 @@ class TutorControlador
                 } else {
 
                     // encriptar el id y el password
-                     $_POST['TutorCorreo'] = md5($_POST['TutorCorreo']);
+                   
+                     $_POST['TutorID'] = md5($_POST['TutorCorreo']);
                      $_POST['TutorPass'] = password_hash($_POST['TutorPass'], PASSWORD_DEFAULT);
+
+                   
                     //mandar todos los datos de post hacia el tutor.modelo para que lo envie a la BD
                     $guardarTutor = TutorModelo::mdlAgregarTutor($_POST);
                     if ($guardarTutor > 0) {
@@ -60,4 +63,68 @@ class TutorControlador
     {
         return TutorModelo::mdlConsultarTutor($tutor);
     }
+
+    public static function ctrEliminarTutor($id){
+        $elimina = TutorModelo::mdlEliminarTutor($id);
+
+        $url = App_controlador::getRute();
+
+        if($elimina>0){
+            App_controlador::messagesInfo("Bien hecho!", "Registro eliminado", "success", $url."usuarios");
+        }else{
+            App_controlador::messagesInfo("Error!", "El registro no se eliminó", "error");
+        }
+    }
+
+
+    //Si dio clic en el boton entrar hacer lo siguiente
+    public function ctrModificarTutor()
+    {
+        if (isset($_POST['btnModificaTutor'])) {
+
+            $hash = false;
+            if($_POST['TutorPass']=="" && $_POST['TutorPassConfir'] == ""){
+                $_POST['TutorPass'] = $_POST['EditTutorPassHide'];
+                $_POST['TutorPassConfir'] =  $_POST['EditTutorPassHide'];
+                $hash = true;
+            }
+
+           
+            if (
+                preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/", $_POST['TutorCorreo']) &&
+                preg_match("/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.([a-zA-Z]{2,4})+$/", $_POST['TutorCorreoConfir']) &&
+                preg_match("/^.{8,}/", $_POST['TutorPass']) &&
+                preg_match("/^.{8,}/", $_POST['TutorPassConfir']) &&
+                preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/", $_POST['TutorNombre']) &&
+                preg_match("/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/", $_POST['TutorApellido'])
+
+            ) {
+                if ($_POST['TutorCorreo'] != $_POST['TutorCorreoConfir']) {
+                    App_controlador::messagesInfo("Error", "Los correos no coinciden :(", "error");
+                } else if ($_POST['TutorPass'] != $_POST['TutorPassConfir']) {
+                    App_controlador::messagesInfo("Error", "Las contraseñas no coinciden :(", "error");
+                } else {
+
+                    // encriptar el id y el password
+                   
+                     $_POST['TutorID'] = md5($_POST['TutorCorreo']);
+                     
+
+                   $_POST['TutorPass'] = $hash ? $_POST['TutorPass'] :  $_POST['TutorPass'] = password_hash($_POST['TutorPass'], PASSWORD_DEFAULT);
+                    //mandar todos los datos de post hacia el tutor.modelo para que lo envie a la BD
+
+                    
+                    $modificarTutor = TutorModelo::mdlModificarTutor($_POST);
+                    if ($modificarTutor > 0) {
+                        App_controlador::messagesInfo("Bien hecho!", "Registro insertado", "success", "usuarios");
+                    } else {
+                        App_controlador::messagesInfo("Error", "Es probable que ya exista este registro", "error");
+                    }
+                }
+            } else {
+                App_controlador::messagesInfo("Error", "Algunos campos no cumplen con el formato valido. Intente de nuevo".$_POST['TutorPass'], "error");
+            }
+        }
+    }
+
 }

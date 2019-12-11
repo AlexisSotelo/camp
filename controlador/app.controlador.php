@@ -42,7 +42,8 @@ class App_controlador
         $whitList = array(
             'usuarios',
             'campamentos',
-            'galeria'
+            'galeria',
+            'elimina'
 
         );
 

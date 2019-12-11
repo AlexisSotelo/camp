@@ -53,8 +53,17 @@
       if (isset($_GET['ruta'])) {
         //Traer la lista blanca de paginas adminitas
         $whiteList = App_controlador::getWhiteList();
+        
         //Guardad en la variable la ruta que venga de GET
-        $ruta_get = $_GET['ruta'];
+
+        //Crea un arreglo vacio
+        $rutas = array();
+
+        // Crea los elementos del arreglo a partir de caracter /
+        $rutas = explode("/",$_GET['ruta']);
+
+        // Asigna a la variable el primer item del arreglo que será la página
+        $ruta_get = $rutas[0];
         //Inicializamos una bandera en true para ver si hay pagina admitida
         $_404 = true;
         //Recorremos la lista de paginas admitidas
